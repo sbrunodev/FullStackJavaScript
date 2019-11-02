@@ -35,8 +35,8 @@ function selecionarCamposRadio() {
 }
 
 btnEntrar.onclick = function () {
-    selecionarCamposTexto();
-    selecionarCamposSelect();
-    selecionarCamposCheck();
-    selecionarCamposRadio();
+    //selecionarCamposTexto();
+    //selecionarCamposSelect();
+    //selecionarCamposCheck();
+    //selecionarCamposRadio();
 }
