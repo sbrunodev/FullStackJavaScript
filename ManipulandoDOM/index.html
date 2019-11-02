@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+    <title>Manipulando DOM</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="form-group">
+            <label>Nome</label>
+            <input type="text" class="form-control" id="txtNome" placeholder="Informe seu Nome, Ex. Bruno Silva">
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-control" id="txtEmail"
+                placeholder="Informe seu e-mail, Ex. brunosilva.dev@outlook.com">
+        </div>
+
+        <div class="form-group">
+            <label>Cidade</label>
+            <select class="form-control" id="selCidades">
+                <option value="-1">Selecione uma Cidade</option>
+                <option value="Presidente Prudente">Presidente Prudente</option>
+                <option value="Pirapozinho">Pirapozinho</option>
+                <option value="Tarabai">Tarabai</option>
+                <option value="Narandiba">Narandiba</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" class="form-control" id="txtSenha">
+        </div>
+
+        <div class="form-group">
+            <label>Selecione o Sexo: </label>
+
+            <label>
+                <input type="radio" name="rbSexo" value="Masculino" />
+                Masculino
+            </label>
+
+            <label>
+                <input type="radio" name="rbSexo" value="Feminino" />
+                Feminino
+            </label>
+
+            <label>
+                <input type="radio" name="rbSexo" value="Indiferente" />
+                Indiferente
+            </label>
+        </div>
+
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="cbManterSelecionado">
+            <label class="form-check-label" for="exampleCheck1">Manter Conectado</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="btnEntrar">Entrar</button>
+    </div>
+
+
+    <script src="js/ManipulandoDOM.js"></script>
+
+</body>
+
+</html>
