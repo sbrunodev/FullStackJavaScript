@@ -43,4 +43,19 @@ var objPessoa2 = new Pessoa("Teste", "18996949124");
 console.log(objPessoa1.getNomeCelular());
 console.log(objPessoa2.getNomeCelular());
 
+// Função Calculo
+objCalcES6 = {
+    msg() {
+        console.log('====== Calculo ES6 ======');
+    },
+    somar(a, b) {
+        console.log(a + b);
+    },
+    *funcaoGeradora(i) {
+        yield i + 1;
+    }
+}
 
+objCalcES6.msg();
+objCalcES6.somar(10, 5);
+console.log(objCalcES6.funcaoGeradora(1).next().value);
