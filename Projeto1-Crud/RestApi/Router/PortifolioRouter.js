@@ -58,4 +58,28 @@ router.post('/?', (req, res, next) => { // Requisição, Resposta e Next
     });
 })
 
+router.delete('/:id', (req, res, next) => { // Requisição, Resposta e Next
+
+    PortifolioModel.deletar(req.params.id, function (erro, retorno) {
+        let resposta = new RespostaClass();
+        if (erro) {
+            resposta.erro = true;
+            resposta.msg = "Ocorreu um erro";
+            console.log('erro: ', erro);
+        }
+        else {
+            if (retorno.affectedRows > 0) { // Quantas linhas foram afetadas
+                resposta.msg = "Portifolio excuido com sucesso";
+            }
+            else
+            {
+                resposta.erro = true;
+                resposta.msg = "Não foi possivel Excluir o Portifolio";
+            }
+        }
+        console.log('erro:', resposta);
+        res.json(resposta);
+    });
+})
+
 module.exports = router;

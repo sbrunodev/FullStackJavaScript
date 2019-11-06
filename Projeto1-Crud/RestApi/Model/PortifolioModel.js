@@ -19,4 +19,8 @@ module.exports = class PortifolioModel {
         );
     }
 
+    static deletar(Id, callback){
+        return db.query("DELETE FROM PORTIFOLIO WHERE ID_PORTIFOLIO = ?", [Id], callback);
+    }
+
 }
