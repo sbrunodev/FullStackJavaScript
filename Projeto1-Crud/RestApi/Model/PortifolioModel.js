@@ -25,6 +25,6 @@ module.exports = class PortifolioModel {
 
     static editar(portifolio, callback) {
         return db.query("UPDATE PORTIFOLIO SET DESCRICAO = ?, DETALHES = ? WHERE ID_PORTIFOLIO = ?", 
-        [portifolio.descricao, portifolio.detalhes, portifolio.id], callback);
+        [portifolio.descricao, portifolio.detalhes, portifolio.id_portifolio], callback);
     }
 }
