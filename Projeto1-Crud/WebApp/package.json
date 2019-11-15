@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack --mode development --watch",
     "build": "webpack --mode production",
-    "start": "webpack-dev-server --mode development --open" 
+    "start": "webpack-dev-server --mode production --open" 
   },
   "author": "Bruno Silva",
   "license": "ISC",
