@@ -41,8 +41,6 @@ class PortifolioController {
 
             for (const servico of response.dados) {
 
-                console.log(servico);
-
                 html += `
                    <tr>
                         <td>${servico.id_portifolio}</td>
@@ -68,7 +66,6 @@ class PortifolioController {
             let btnsExcluir = document.querySelectorAll(".btnExcluir");
 
             btnsEditar.forEach(function (item) {
-                console.log(item);
                 item.addEventListener("click", event => {
                     objPortifolioController.limparAlert();
                     let id = event.target.getAttribute("data-id");
@@ -77,7 +74,6 @@ class PortifolioController {
             });
 
             btnsExcluir.forEach(function (item) {
-                console.log(item);
                 item.addEventListener("click", event => {
                     objPortifolioController.limparAlert();
                     let id = event.target.getAttribute("data-id");
@@ -91,11 +87,50 @@ class PortifolioController {
     }
 
     prepararEditar(id) {
-        console.log("Editar: " + id)
+        console.log("Editar: " + id);
+
+        PortifolioModel.getId(id)
+            .then((response) => {
+
+
+                objPortifolioController.exibirElemento("divFomulario");
+                objPortifolioController.ocultarElemento("divListagem");
+
+                console.log(response);
+                if (!response.erro) {
+                    let data = response.dados[0];
+
+                    let objPortifolioClass = new PortifolioClass(data.id_portifolio, data.descricao, data.detalhes);
+
+                    formulario.id.value = objPortifolioClass.id;
+                    formulario.descricao.value = objPortifolioClass.descricao;
+                    formulario.detalhes.value = objPortifolioClass.detalhes;
+
+                }
+            })
+            .catch((response) => {
+                console.log('Erro Catch', response);
+            });
+
     }
 
     deletar(id) {
         console.log("(f) - Deletar: " + id);
+        PortifolioModel.deletar(id)
+            .then(response => {
+
+                if (response.erro)
+                    this.exibirMsgAlert(response.msg, "erro");
+                else {
+                    this.getTodosTable(divPortifolios);
+                    this.exibirMsgAlert(response.msg, "sucesso");
+                }
+
+            })
+            .catch(response => {
+                console.log('Erro Catch', response);
+            });
+
     }
 
     ocultarElemento(elemento) {
@@ -132,11 +167,102 @@ class PortifolioController {
     }
 
     editar(formulario) {
+        let id, descricao, detalhes;
 
+        id = form.id.value;
+        descricao = formulario.descricao.value;
+        detalhes = formulario.detalhes.value;
+
+        if (id && descricao && detalhes) {
+            let objPortifolioClass = new PortifolioClass(id, descricao, detalhes);
+
+            console.log("OEEEEEEEEEEEEEEEE");
+            console.log(objPortifolioClass);
+
+            PortifolioModel
+                .editar(objPortifolioClass)
+                .then(response => {
+
+                    if (response.erro)
+                        this.exibirMsgAlert(response.msg, "erro");
+                    else {
+                        this.getTodosTable(divPortifolios);
+                        this.exibirMsgAlert(response.msg, "sucesso");
+                        objPortifolioController.ocultarElemento("divFomulario");
+                        objPortifolioController.exibirElemento("divListagem");
+                        this.limparCamposForm(formulario);
+                    }
+
+                })
+                .catch(response => {
+                    console.log("erro catch:", response);
+                });
+        }
+        else {
+            this.exibirMsgAlert("Por favor Preehcer todos os campos.", "erro");
+        }
     }
 
     adicionar(formulario) {
+        let descricao, detalhes;
 
+        descricao = formulario.descricao.value;
+        detalhes = formulario.detalhes.value;
+
+        if (descricao && detalhes) {
+            let objPortifolioClass = new PortifolioClass(null, descricao, detalhes);
+
+            PortifolioModel
+                .adicionar(objPortifolioClass)
+                .then(response => {
+
+                    if (response.erro)
+                        this.exibirMsgAlert(response.msg, "erro");
+                    else {
+                        this.getTodosTable(divPortifolios);
+                        this.exibirMsgAlert(response.msg, "sucesso");
+                        objPortifolioController.ocultarElemento("divFomulario");
+                        objPortifolioController.exibirElemento("divListagem");
+                        this.limparCamposForm(formulario);
+                    }
+
+                })
+                .catch(response => {
+                    console.log("erro catch:", response);
+                });
+
+            /*
+            let promise = new Promise(function (resolve, reject) {
+                let promiseFetch = PortifolioModel.adicionar(objPortifolioClass);
+
+                promiseFetch.then(response => {
+                    resolve(response);
+                });
+            });
+
+            promise.then(response => {
+                console.log(response);
+
+                if (response.erro)
+                    this.exibirMsgAlert(response.msg, "erro");
+                else {
+                    this.getTodosTable(divPortifolios);
+                    this.exibirMsgAlert(response.msg, "sucesso");
+                    objPortifolioController.ocultarElemento("divFomulario");
+                    objPortifolioController.exibirElemento("divListagem");
+                    this.limparCamposForm(formulario);
+
+                }
+            }).catch(response => {
+                console.log("erro catch:", response);
+            });
+            */
+
+
+        }
+        else {
+            this.exibirMsgAlert("Por favor Preehcer todos os campos.", "erro");
+        }
     }
 
     registrarEvents() {
@@ -152,6 +278,7 @@ class PortifolioController {
                 event.preventDefault();
                 objPortifolioController.limparAlert();
 
+                console.log('BTN SALVAR');
                 if (formulario.id.value) {
                     objPortifolioController.editar(formulario);
                 }

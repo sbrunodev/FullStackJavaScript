@@ -84,6 +84,7 @@ router.put('/', (req, res, next) => {
 
     PortifolioModel.editar(req.body, function (erro, retorno) {
         let resposta = new RespostaClass();
+     
         if (erro) {
             resposta.erro = true;
             resposta.msg = "Ocorreu um erro";
