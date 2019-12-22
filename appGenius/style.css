@@ -1,0 +1,13 @@
+.area {
+  height: 250px;
+  width: 250px;
+  background: lightgray;
+}
+
+.p {
+  padding: 15px;
+}
+
+.marginTop10{
+  margin-top: 10px;;
+}

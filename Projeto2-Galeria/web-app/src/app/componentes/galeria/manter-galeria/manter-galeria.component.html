@@ -1,0 +1,61 @@
+<h4>Gerenciamento de Imagens</h4>
+
+<div id="msg"></div>
+
+<div id="listagem">
+
+    <button id="btn-exibir-formulario" type="button" class="btn btn-primary">
+        <i class="far far-file-image"></i>Cadastrar
+    </button>
+    <br>
+    <br>
+
+    <div id="galeria-listagem">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Código</th>
+                        <th scope="col">Descrição</th>
+                        <th scope="col">Imagem</th>
+                        <th scope="col">Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="formulario">
+    <div class="row">
+        <div class="col-sm">
+
+            <form method="POST" action="/" id="galeriaForm">
+                <div class="form-group">
+                    <label for="id">Código</label>
+                    <input type="number" class="form-control" id="id_galeria" name="id_galeria" />
+                </div>
+
+                <div class="form-group">
+                    <label for="id">Titulo</label>
+                    <input type="number" class="form-control" id="titulo" name="titulo" />
+                </div>
+
+                <div class="form-group">
+                    <label for="id">Imagem</label>
+                    <input type="file" class="form-control-file" id="imgUpload" id="imgUpload" />
+                </div>
+
+                <div class="form-inline">
+                    <button class="btn btn-primary" id="btnSalvar">Salvar</button>
+                    <button class="btn btn-primary" id="btnCancelar">Cancelar</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

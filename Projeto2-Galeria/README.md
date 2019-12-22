@@ -1,7 +1,3 @@
-Crud.
-FrontEnd - Angular
-Bootstrap.
-
 BackEnd
 Web api Node.js - MySQL
 
@@ -20,3 +16,14 @@ Ex. Tente usar da seguinte maneira: nodemon ./api.js,
 Adicionando o mysql
 npm install --save mysql
        
+__________
+
+Front-end
+
+Criando o Projeto
+ng new web-app
+
+ng serve --open
+
+ng g c 
+
