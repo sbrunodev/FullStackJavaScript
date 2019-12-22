@@ -3,25 +3,33 @@
 
 <head>
     <title>Genius, by Bruno</title>
+
     <meta http-equiv="Content-Language" content="pt-br">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
     <div class="container">
 
-        <h3>Genius</h3>
-        <button class="btn btn-primary" id="btnRun">Go!</button>
-       
-        <div id="divMsg" class="marginTop10"></div>
+        <div class="row marginTop10">
 
+            <div class="col-md-6">
+                <h2>Genius
+                    <button class="btn btn-primary" id="btnRun" title="Clique aqui para Iniciar o Jogo">Go!</button>
+                </h2>
+            </div>
 
+            <div class="col-md-6 text-right">
+                <h2 id="msgRecorde">Seu recorde é:</h2>
+            </div>
+
+        </div>
+        <!--
         <div class="row">
             <div class="p col-md-6">
                 <div class="area" id="e1"></div>
@@ -41,6 +49,30 @@
                 <div class="area" id="e4"></div>
             </div>
         </div>
+        -->
+
+        <div class="row game">
+
+            <div class="p col-md-3">
+                <div class="area" id="e1"></div>
+            </div>
+
+            <div class="p col-md-3">
+                <div class="area" id="e2"></div>
+            </div>
+
+            <div class="p col-md-3">
+                <div class="area" id="e3"></div>
+            </div>
+
+            <div class="p col-md-3">
+                <div class="area" id="e4"></div>
+            </div>
+        </div>
+
+        <div id="divMsg" class="marginTop10"></div>
+
+        <div id="divLog" class="marginTop10"></div>
 
     </div>
 

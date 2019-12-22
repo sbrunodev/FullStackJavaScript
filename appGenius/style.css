@@ -1,3 +1,4 @@
+/*
 .area {
   height: 250px;
   width: 250px;
@@ -10,4 +11,24 @@
 
 .marginTop10{
   margin-top: 10px;;
+}
+*/
+
+.area {
+  height: 250px;
+  width: 250px;
+  background: lightgray;
+  border-radius: 50%;
+}
+
+.p {
+  padding: 15px;
+}
+
+.marginTop10{
+  margin-top: 10px;
+}
+
+.invisivel{
+  display: none;
 }

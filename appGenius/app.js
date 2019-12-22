@@ -7,6 +7,7 @@ _sistemaEmExecucao = false;
 
 $(document).ready(function () {
 
+    inicializarTela();
     inicializarCores();
     adicionarEvento();
 
@@ -15,6 +16,21 @@ $(document).ready(function () {
     });
 
 });
+
+function inicializarTela() {
+    $(".game").hide();
+    let strRecorde = localStorage.getItem("recorde");
+
+    if (strRecorde == null)
+        $("#msgRecorde").html('Seu recorde é: 0');
+    else {
+        objRecorde = JSON.parse(strRecorde);
+
+        $("#msgRecorde").html(`Seu recorde é: ${objRecorde.pontuacao}`);
+        $("#msgRecorde").attr("title","Recorde em: \n"+objRecorde.data);
+
+    }
+}
 
 function inicializarCores() {
 
@@ -29,6 +45,7 @@ function inicializarCores() {
 }
 
 function run() {
+    $(".game").show();
     getSequencia();
 }
 
@@ -69,10 +86,11 @@ async function getSequencia() {
 }
 
 function atualizaOrdensGeradas() {
-    console.log('Iniciou');
+
+    exibeLog('Iniciou');
     _sequenciaGeradaSistema.forEach(obj => {
-        console.log(`${obj.id} - ${obj.cor}`);
-        console.log(` ----- `);
+        exibeLog(`${obj.id} - ${obj.cor}`);
+        exibeLog(` ----- `);
     });
 }
 
@@ -91,29 +109,42 @@ function adicionarEvento() {
     });
 }
 
-function clickArea(obj) {
+async function clickArea(obj) {
 
-    console.log("Sistema em Execução: " + _sistemaEmExecucao);
+    //exibeLog("Sistema em Execução: " + _sistemaEmExecucao);
     if (!_sistemaEmExecucao) {
         _sequenciaGeradaUsuario.push(obj);
 
-        console.log(_sequenciaGeradaUsuario.length, _rodadas);
+        exibeLog(_sequenciaGeradaUsuario.length + " " + _rodadas);
 
         // Verifica se está tudo certo
         let errou = false;
-        for (let i = 0; i < _sequenciaGeradaUsuario.length; i++) {
+        for (let i = 0; i < _sequenciaGeradaUsuario.length && !errou; i++) {
+
             if (_sequenciaGeradaUsuario[i].cor != _sequenciaGeradaSistema[i].cor)
                 errou = true;
         }
 
         if (errou) {
+
+            let dataAtual = new Date();
+
+            let objRecorde = {
+                pontuacao: _sequenciaGeradaUsuario.length - 1,
+                data: dataAtual.toLocaleString('pt-BR', { timeZone: 'UTC' })
+            }
+
+            localStorage.setItem("recorde", JSON.stringify(objRecorde));
+
             notificacao(`Você errou :(, Pontuação: ${_sequenciaGeradaUsuario.length - 1}`, 'danger');
             _sequenciaGeradaSistema = [];
+            inicializarTela();
         }
         else
             if (_sequenciaGeradaUsuario.length == _rodadas) {
                 getSequencia();
                 notificacao(`Rodada ${_rodadas} Finalizada. Preste atencao e contiue ganhando.`, 'success');
+                await sleep(_velocidade);
                 _rodadas++;
                 _sequenciaGeradaUsuario = [];
             }
@@ -130,6 +161,11 @@ function notificacao(msg, tipo) {
     html += `</div>`;
 
     $("#divMsg").html(html);
+}
+
+
+function exibeLog(msg) {
+    $("#divLog").prepend(msg + "<br/>");
 }
 
 function alteraCor(id, cor) {
