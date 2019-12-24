@@ -13,16 +13,40 @@
   margin-top: 10px;;
 }
 */
+body{
+  cursor: pointer !important;
+  /*background: #3C2F2F;*/
+  /*color:white;*/
+  /*cursor: url(./img/cursorMao.jpg) 4 12, auto !important;*/
+}
+
+.bgNight{
+  background: rgb(59, 52, 52);
+  color:white;
+}
+
+.bgDay{
+    background: white;
+    color:black;
+}
 
 .area {
   height: 250px;
   width: 250px;
   background: lightgray;
   border-radius: 50%;
+  /*cursor: pointer;*/
+  display: table;
+  margin: 0 auto;
+  
+}
+
+.area:active{
+  opacity:0.6;
 }
 
 .p {
-  padding: 15px;
+  padding: 10px;  
 }
 
 .marginTop10{

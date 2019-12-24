@@ -1,24 +1,28 @@
-_listaCores = [];
-_velocidade = 500;
-_sequenciaGeradaSistema = [];
-_sequenciaGeradaUsuario = [];
+_velocidade = 1000;
+_sequenciaGeradaSistema = null;
+_sequenciaGeradaUsuario = null;
 _rodadas = 1;
 _sistemaEmExecucao = false;
+_tamanhoBase = 250;
 
 $(document).ready(function () {
 
+    inicializaBg();
     inicializarTela();
-    inicializarCores();
-    adicionarEvento();
 
     $("#btnRun").click(() => {
         run();
     });
-
 });
 
 function inicializarTela() {
-    $(".game").hide();
+
+    $(".game, #msgPontuacao").hide();
+    $("#msgRecorde, #btnRun, .config").show();
+    $("#areaGame").empty();
+    _sequenciaGeradaSistema = [];
+    _sequenciaGeradaUsuario = [];
+
     let strRecorde = localStorage.getItem("recorde");
 
     if (strRecorde == null)
@@ -27,26 +31,92 @@ function inicializarTela() {
         objRecorde = JSON.parse(strRecorde);
 
         $("#msgRecorde").html(`Seu recorde é: ${objRecorde.pontuacao}`);
-        $("#msgRecorde").attr("title","Recorde em: \n"+objRecorde.data);
+        $("#msgRecorde").attr("title", "Recorde em: \n" + objRecorde.data);
 
     }
 }
 
+function inicializaBg() {
+
+    setInterval(() => {
+        //alert('Oi');
+        let bgId = getRandom(1, 2);
+        $("#bgBody").removeClass("bgNight").removeClass("bgDay");
+        console.log(bgId);
+        switch (bgId) {
+            case 1: {
+                $("#bgBody").addClass("bgDay");
+            }
+
+            case 2: {
+                $("#bgBody").addClass("bgNight");
+            }
+        }
+    }, 10000);
+}
+
 function inicializarCores() {
 
-    _listaCores.push({ id: 1, cor: "blue" });
-    _listaCores.push({ id: 2, cor: "red" });
-    _listaCores.push({ id: 3, cor: "green" });
-    _listaCores.push({ id: 4, cor: "yellow" });
+    let qtde = $("#qtde").val();
 
-    _listaCores.forEach(obj => {
+    for (let i = 0; i < qtde; i++) {
+        let obj = _listaCores[i];
         alteraCor(obj.id, obj.cor);
-    });
+    }
 }
 
 function run() {
+    inicializarTela();
+    notificacao("Vamos lá !", "primary");
+    _velocidade = $("#velocidade").val();
     $(".game").show();
+    $("#msgPontuacao").show();
+    $("#msgRecorde, .config").hide();
+    $("#btnRun").hide();
+    constroiTela();
+
+    inicializarCores();
     getSequencia();
+
+    adicionarEvento();
+}
+
+function constroiTela() {
+    let qtde = $("#qtde").val() / 4;
+
+    let pos = 0;
+    for (let i = 0; i < qtde; i++)
+        pos = criaArea(pos);
+
+    definirTamanhoArea(qtde);
+}
+
+function definirTamanhoArea(qtde) {
+    let tamanho = _tamanhoBase / qtde;
+    $(".area").css("width", tamanho);
+    $(".area").css("height", tamanho);
+}
+
+function criaArea(pos) {
+    let html = '';
+    html += '<div class="p col-md-3">';
+    html += '    <div class="area align-self-center" id="e' + (++pos) + '" ></div > ';
+    html += '</div>';
+
+    html += '<div class="p col-md-3">';
+    html += '    <div class="area" id="e' + (++pos) + '"></div>';
+    html += '</div>';
+
+    html += '<div class="p col-md-3">';
+    html += '    <div class="area" id="e' + (++pos) + '"></div>';
+    html += '</div>';
+
+    html += '<div class="p col-md-3">';
+    html += '    <div class="area" id="e' + (++pos) + '"></div>';
+    html += '</div>';
+
+    $("#areaGame").append(html);
+    return pos;
 }
 
 function sleep(ms) {
@@ -55,6 +125,7 @@ function sleep(ms) {
 
 async function getSequencia() {
 
+    let qtde = $("#qtde").val();
     _sistemaEmExecucao = true;
 
     let idElemento, obj;
@@ -62,7 +133,7 @@ async function getSequencia() {
 
     for (let i = 0; i < _sequenciaGeradaSistema.length; i++) {
         let obj = _sequenciaGeradaSistema[i];
-        alteraCor(obj.id, "black");
+        alteraCor(obj.id, "white");
         await sleep(_velocidade);
         alteraCor(obj.id, obj.cor);
         await sleep(_velocidade);
@@ -72,17 +143,18 @@ async function getSequencia() {
     await sleep(_velocidade);
 
     // Exibe novo elemento
-    idElemento = getRandom(1, 4);
+    idElemento = getRandom(1, qtde);
     obj = _listaCores.find(x => x.id == idElemento);
-    alteraCor(obj.id, "black");
+    alteraCor(obj.id, "white");
     await sleep(_velocidade);
     alteraCor(obj.id, obj.cor);
-
 
     _sequenciaGeradaSistema.push(obj);
     atualizaOrdensGeradas();
 
     _sistemaEmExecucao = false;
+
+    notificacao('Agora é sua vez, vamos lá', 'primary');
 }
 
 function atualizaOrdensGeradas() {
@@ -102,11 +174,17 @@ async function mostrarElemento(obj) {
 }
 
 function adicionarEvento() {
-    _listaCores.push({ id: 1, cor: "blue" });
-    _listaCores.forEach(obj => {
+
+    let qtde = $("#qtde").val();
+
+    for (let i = 0; i < qtde; i++) {
+        let obj = _listaCores[i];
         let elemento = document.getElementById(`e${obj.id}`);
+        console.log(elemento);
+
         elemento.addEventListener("click", function () { clickArea(obj) }, false);
-    });
+
+    }
 }
 
 async function clickArea(obj) {
@@ -126,31 +204,48 @@ async function clickArea(obj) {
         }
 
         if (errou) {
-
-            let dataAtual = new Date();
-
-            let objRecorde = {
-                pontuacao: _sequenciaGeradaUsuario.length - 1,
-                data: dataAtual.toLocaleString('pt-BR', { timeZone: 'UTC' })
-            }
-
-            localStorage.setItem("recorde", JSON.stringify(objRecorde));
-
-            notificacao(`Você errou :(, Pontuação: ${_sequenciaGeradaUsuario.length - 1}`, 'danger');
-            _sequenciaGeradaSistema = [];
+            atualizaRecord(_sequenciaGeradaSistema.length - 1);
+            notificacao(`Você errou :(, Pontuação: ${_sequenciaGeradaSistema.length - 1}`, 'danger');
             inicializarTela();
         }
         else
             if (_sequenciaGeradaUsuario.length == _rodadas) {
                 getSequencia();
-                notificacao(`Rodada ${_rodadas} Finalizada. Preste atencao e contiue ganhando.`, 'success');
+                notificacao('Preste atenção ! ', 'primary');
+                //notificacao(`Rodada ${_rodadas} Finalizada. Preste atencao e contiue ganhando.`, 'success');
                 await sleep(_velocidade);
                 _rodadas++;
                 _sequenciaGeradaUsuario = [];
+                $("#msgPontuacao").html('Pontuação: ' + _sequenciaGeradaSistema.length);
             }
     }
     else
         notificacao('Aguarde sua vez e preste atencao nos valores exibidos pelo Sistema.', 'warning');
+}
+
+function atualizaRecord(pontuacao) {
+
+    let atualizarValor = false;
+    let strRecorde = localStorage.getItem("recorde");
+
+    if (strRecorde == null)
+        atualizarValor = true;
+    else {
+        objRecordoExistente = JSON.parse(strRecorde);
+        if (pontuacao > objRecordoExistente.pontuacao)
+            atualizarValor = true;
+    }
+
+    if (atualizarValor) {
+
+        let dataAtual = new Date();
+
+        let objRecorde = {
+            pontuacao: pontuacao,
+            data: dataAtual.toLocaleString('pt-BR', { timeZone: 'UTC' })
+        }
+        localStorage.setItem("recorde", JSON.stringify(objRecorde));
+    }
 }
 
 function notificacao(msg, tipo) {
